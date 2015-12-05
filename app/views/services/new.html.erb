@@ -1,0 +1,100 @@
+<!-- Validation failure messages -->
+<% if @service.errors.any? %>
+  <% @service.errors.full_messages.each do |message| %>
+    <div class="alert alert-dismissable alert-danger">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <%= message %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="page-header">
+  <h3>Add Service</h3>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <form action="/create_service" method="post">
+      <!-- Hidden input for authenticity token to protect from forgery -->
+      <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+
+      <!-- Label and input for image -->
+      <div class="form-group">
+        <label for="image" class="control-label">
+          Image
+        </label>
+
+        <input type="text" id="image" name="image" placeholder="Image" class="form-control" value="<%= @service.image %>">
+      </div>
+
+      <!-- Label and input for category -->
+      <div class="form-group">
+        <label for="category" class="control-label">
+          Category
+        </label>
+
+        <select name="category" id="category" class="form-control" placeholder="Category" value="<%= @service.category %>">
+        <option value="Veterinary">Veterinary</option>
+        <option value="Grooming Services">Grooming Services</option>
+        <option value="Pet Stores">Pet Stores</option>
+        <option value="Pet Sitter/Walker">Pet Sitter/Walker</option>
+        <option value="Pet Hotels">Pet Hotels</option>
+        <option value="Pet Trainers">Pet Trainers</option>
+        <option value="Pet Shelters">Pet Shelters</option>
+
+</select>
+      </div>
+
+      <!-- Label and input for name -->
+      <div class="form-group">
+        <label for="name" class="control-label">
+          Name
+        </label>
+
+        <input type="text" id="name" name="name" placeholder="Name" class="form-control" value="<%= @service.name %>">
+      </div>
+
+      <!-- Label and input for address -->
+      <div class="form-group">
+        <label for="address" class="control-label">
+          Address
+        </label>
+
+        <input type="text" id="address" name="address" placeholder="Address" class="form-control" value="<%= @service.address %>">
+      </div>
+
+      <!-- Label and input for phone -->
+      <div class="form-group">
+        <label for="phone" class="control-label">
+          Phone
+        </label>
+
+        <input type="text" id="phone" name="phone" placeholder="Phone" class="form-control" value="<%= @service.phone %>">
+      </div>
+
+      <!-- Label and input for description -->
+      <div class="form-group">
+        <label for="description" class="control-label">
+          Description
+        </label>
+
+        <input type="text" id="description" name="description" placeholder="Description" class="form-control" value="<%= @service.description %>">
+      </div>
+
+      <!-- Label and input for avg_rating -->
+      <div class="form-group">
+        <label for="avg_rating" class="control-label">
+          Avg rating
+        </label>
+
+        <input type="text" id="avg_rating" name="avg_rating" placeholder="Avg rating" class="form-control" value="<%= @service.avg_rating %>">
+      </div>
+
+      <button class="btn btn-success">
+        Create Service
+      </button>
+      or
+      <a href="/services">Cancel</a>
+    </form>
+  </div>
+</div>

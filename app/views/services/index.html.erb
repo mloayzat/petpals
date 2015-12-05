@@ -1,0 +1,207 @@
+ <style>
+
+ .starrating{ background-image: url("/assets/images/Star.ico"); 
+              background-position: left bottom;
+            background-size: 25%  ;
+            background-repeat: no-repeat;
+                        padding-left: 12px ;
+            padding-top: 60px;
+            padding-bottom: 5px;
+            font-weight: bold;
+            font-size: 15px; 
+
+  }
+
+
+}
+
+
+ </style>
+
+
+ <div class="row">
+  <div class="col-md-12" >
+    <a href="/services/new" class="btn btn-default btn-block">
+      <i class="fa fa-plus"></i>
+    </a>
+
+    <hr>
+  </div>
+</div>
+
+<div class="container">
+    <div class="row">
+
+
+    
+        <div class="col-sm-offset-0 col-sm-6">
+        <% @services.each do |service| %>
+          <div class="row">
+            <div class="col-sm-offset-0 col-sm-4">
+            <a href="/services/<%=service.id%>">
+            <img height="150" width="150" src="<%= service.image %>" class="img-responsive" ></img> </a>
+            </div>
+            <div class="col-sm-offset-0 col-sm-8">
+            <div class="col-sm-offset-0 col-sm-6">
+              <div class="row">
+                <div class="col-sm-offset-0 col-sm-12">
+                 <a href="/services/<%=service.id%>"> 
+                    <%= service.name %> 
+                      </a><br>
+                    <%= service.category %> 
+                </div>
+                <div class="starrating" class="col-sm-offset-0 col-sm-12" >
+                4.5 
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-offset-0 col-sm-6">
+              <div class="row">
+                  <div class="col-sm-offset-0 col-sm-12">
+                  <i class="fa fa-map-pin">  </i> <%= service.address %><br>
+          
+                  </div>
+                  <div class="col-sm-offset-0 col-sm-12">
+                   <i class="fa fa-phone">   </i> <%= service.phone %> 
+                  </div>
+
+
+              </div>
+
+              </div>
+              <div class="row">
+                      <div class="col-sm-offset-0 col-sm-12">
+                          <%= service.description %>   
+                      </div>
+                </div>
+            </div>
+
+        </div>
+                  <div class="row">
+                      <div class="col-sm-offset-0 col-sm-12">
+                          <a href="/services/<%=service.id%>/images" >Click for Images</a>
+                      </div>
+                      
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-offset-0 col-sm-2">
+                          User Image
+                      </div>
+                      <div class="col-sm-offset-0 col-sm-10">
+                          <i class="fa fa-commenting-o"></i> Here goes a long comment chosen on random from the comments for this restaurant   
+                      </div>
+                  </div>   
+                  <hr>               
+ <% end %>
+        </div>
+
+       
+
+
+
+
+        <div class="col-sm-6">
+        <!DOCTYPE html>
+<html> 
+<head> 
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+  <title>Google Maps Multiple Markers</title> 
+  <script src="http://maps.google.com/maps/api/js?sensor=false" 
+          type="text/javascript"></script>
+</head> 
+<body>
+  <div id="map" style="width: 500px; height: 400px;"></div>
+
+  <script type="text/javascript">
+
+    var locations = [
+      <% @services.each do |service| %>
+<% url_safe_street_address = URI.encode(service.address) %>
+<% url = "http://maps.googleapis.com/maps/api/geocode/json?address="+url_safe_street_address %>
+<% parsed_data = JSON.parse(open(url).read) %>
+<% @latitude = parsed_data["results"][0]["geometry"]["location"]["lat"] %>
+<% @longitude = parsed_data["results"][0]["geometry"]["location"]["lng"] %>
+
+      ['<h4><a href="/services/<%=service.id%>"><%= service.name %></a> <br> <i class="fa fa-map-pin">  </i><%= service.address %> <br> <i class="fa fa-phone">   </i><%= service.phone %></H4>', <%= @latitude %>, <%= @longitude %>, 4],
+  <% end %>
+    ];
+
+ // Setup the different icons and shadows
+    var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
+    
+    var icons = [
+      iconURLPrefix + 'red-dot.png',
+      iconURLPrefix + 'green-dot.png',
+      iconURLPrefix + 'blue-dot.png',
+      iconURLPrefix + 'orange-dot.png',
+      iconURLPrefix + 'purple-dot.png',
+      iconURLPrefix + 'pink-dot.png',      
+      iconURLPrefix + 'yellow-dot.png'
+    ]
+    var iconsLength = icons.length;
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng(-37.92, 151.25),
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      mapTypeControl: false,
+      streetViewControl: false,
+      panControl: false,
+      zoomControlOptions: {
+         position: google.maps.ControlPosition.LEFT_BOTTOM
+      }
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+      maxWidth: 160
+    });
+
+    var markers = new Array();
+    
+    var iconCounter = 0;
+    
+    // Add the markers and infowindows to the map
+    for (var i = 0; i < locations.length; i++) {  
+      var marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map,
+        icon: iconURLPrefix + 'yellow-dot.png'  // Add the markers and infowindows to the map yellow to  color 
+      });
+
+      markers.push(marker);
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+      
+      iconCounter++;
+      // We only have a limited number of possible icon colors, so we may have to restart the counter
+      if(iconCounter >= iconsLength) {
+        iconCounter = 0;
+      }
+    }
+
+    function autoCenter() {
+      //  Create a new viewpoint bound
+      var bounds = new google.maps.LatLngBounds();
+      //  Go through each...
+      for (var i = 0; i < markers.length; i++) {  
+        bounds.extend(markers[i].position);
+      }
+      //  Fit these bounds to the map
+      map.fitBounds(bounds);
+    }
+    autoCenter();
+  </script>
+    </div>
+</div>
+</div>
+
+
+ 
+</body>
+</html>

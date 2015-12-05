@@ -1,0 +1,68 @@
+
+
+<div class="page-header">
+  <h3><%= @service.name %></h3>
+</div>
+
+<div class="container" >
+ <div class="row">
+  <div class="col-sm-3">
+<a href="/services/<%=@service.id%>">
+          <img height="900" width="900" src="<%= @service.image %>" class="img-responsive" ></img>
+        </a>
+</div>
+<div class="col-sm-3"><H1><%= @service.name %></H1></div>
+<div class="col-sm-6"></div>
+
+</div>
+
+  
+
+    <dl class="dl-horizontal">
+      <dt>Description</dt>
+      <dd><%= @service.description %></dd>     
+
+      <dt>Category</dt>
+      <dd><%= @service.category %></dd>
+
+      <dt>Address</dt>
+      <dd><%= @service.address %></dd>
+
+      <dt>Phone</dt>
+      <dd><%= @service.phone %></dd>
+
+
+
+      <dt>Avg rating</dt>
+  <br>
+  <div class="small-2 large-4 columns">
+    <% if current_user %>
+     
+      <br>
+   <%end%>
+
+    </dl>
+
+    <div class="btn-group btn-group-justified">
+      <a href="/services" class="btn btn-primary">
+        Back
+      </a>
+      <a href="/services/<%= @service.id %>/edit" class="btn btn-warning">
+        Edit
+      </a>
+      <a href="/delete_service/<%= @service.id %>" class="btn btn-danger" rel="nofollow">
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
+<div class="row">
+
+  </div>
+</div>
+
+<div class="rating-large">
+        <i class="star-img stars_4_half" title="4.5 star rating">
+            <img class="offscreen" height="303" src="//s3-media4.fl.yelpcdn.com/assets/srv0/yelp_styleguide/c2252a4cd43e/assets/img/stars/stars_map.png" width="84" alt="4.5 star rating">
+        </i>
+    </div>
